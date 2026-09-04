@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  /* Paleta — identidade da feira: verde institucional + acento âmbar de premiação */
+  --paper: #F5F2E6;      /* fundo — papel de laboratório */
+  --paper-2: #ECE7D4;    /* fundo alternativo / seções */
+  --ink: #182620;        /* texto principal, quase-preto esverdeado */
+  --ink-soft: #4B564E;   /* texto secundário */
+  --forest: #1B4332;     /* verde institucional — primário */
+  --forest-light: #2D6A4F;
+  --forest-dark: #10281D;
+  --amber: #E2A23B;      /* acento — prêmios, destaque */
+  --amber-soft: #F3D9A8;
+  --lime: #A9C551;       /* acento secundário — chips de área */
+  --line: #D8D0B4;       /* hairline sobre o papel */
+  --white: #FFFDF7;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-forest: var(--forest);
+  --color-forest-light: var(--forest-light);
+  --color-forest-dark: var(--forest-dark);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-lime: var(--lime);
+  --color-line: var(--line);
+  --color-white: var(--white);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Textura sutil de "papel milimetrado" — remete a caderno de laboratório */
+.grid-texture {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -1px -1px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-tag {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+::selection {
+  background: var(--amber-soft);
+  color: var(--forest-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
