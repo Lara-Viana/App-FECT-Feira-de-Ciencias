@@ -1,5 +1,9 @@
-// Dados fictícios para prototipagem das telas.
-// No próximo passo isso será substituído por chamadas a um backend / storage local.
+// Tipos e dados de apoio do app.
+//
+// - Os TIPOS (Project, Area...) são usados em todo o app.
+// - `seedProjects` NÃO é mais exibido direto: serve só para popular o Firestore
+//   (botão "Carregar projetos de exemplo" na tela Gerenciar projetos).
+// - eventInfo, schedule e os usuários fictícios continuam locais (não fazem parte do CRUD).
 
 export type Area =
   | "Exatas"
@@ -80,7 +84,7 @@ export const schedule: ScheduleItem[] = [
   },
 ];
 
-export const projects: Project[] = [
+export const seedProjects: Project[] = [
   {
     id: "p1",
     code: "A-01",

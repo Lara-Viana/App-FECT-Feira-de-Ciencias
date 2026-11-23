@@ -4,6 +4,10 @@ import Link from "next/link";
 import { Microscope, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
+/**
+ * Cabeçalho fixo no topo de cada tela: logo FECT, botão Entrar/Sair e (opcional)
+ * uma linha pequena (`eyebrow`) + título grande (`title`).
+ */
 export default function Header({
   eyebrow,
   title,
@@ -11,6 +15,7 @@ export default function Header({
   eyebrow?: string;
   title?: string;
 }) {
+  // Sessão atual (null = visitante sem login) e função de sair.
   const { session, logout } = useAuth();
 
   return (
@@ -26,6 +31,7 @@ export default function Header({
             </span>
           </Link>
 
+          {/* Logado: mostra o primeiro nome + sair. Visitante: link para a tela de login. */}
           {session ? (
             <button
               onClick={logout}

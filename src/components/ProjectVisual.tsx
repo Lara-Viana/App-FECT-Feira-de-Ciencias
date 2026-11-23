@@ -1,6 +1,7 @@
 import { Sprout, FlaskConical, Cpu, BookOpen, Sigma } from "lucide-react";
 import type { Area } from "@/lib/mockData";
 
+// Ícone e cores usados como "capa" de cada área (não há fotos reais dos projetos).
 const areaVisual: Record<
   Area,
   { icon: React.ComponentType<{ size?: number; strokeWidth?: number }>; bg: string; fg: string }
@@ -12,6 +13,7 @@ const areaVisual: Record<
   Tecnologia: { icon: Cpu, bg: "#4B2C77", fg: "#E7DCF3" },
 };
 
+/** Capa colorida do projeto: ícone da área + código do estande no canto. */
 export default function ProjectVisual({
   area,
   code,
@@ -21,6 +23,7 @@ export default function ProjectVisual({
   code: string;
   className?: string;
 }) {
+  // Se a área for desconhecida, usa um visual padrão.
   const { icon: Icon, bg, fg } = areaVisual[area] ?? {
     icon: FlaskConical,
     bg: "#1B4332",

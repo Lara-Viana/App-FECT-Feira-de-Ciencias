@@ -1,5 +1,6 @@
 import type { Area } from "@/lib/mockData";
 
+// Cores (fundo / texto) de cada área do conhecimento.
 const areaStyles: Record<Area, { bg: string; fg: string }> = {
   Exatas: { bg: "#DDE6F5", fg: "#1F3A66" },
   Biológicas: { bg: "#DCEEDB", fg: "#265C33" },
@@ -8,6 +9,7 @@ const areaStyles: Record<Area, { bg: string; fg: string }> = {
   Tecnologia: { bg: "#E7DCF3", fg: "#4B2C77" },
 };
 
+/** Etiqueta colorida com o nome da área (Exatas, Biológicas...). */
 export default function AreaChip({ area }: { area: Area }) {
   const style = areaStyles[area];
   return (

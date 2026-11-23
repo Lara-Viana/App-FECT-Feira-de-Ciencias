@@ -8,13 +8,19 @@ import PageShell from "@/components/PageShell";
 import { useAuth } from "@/context/AuthContext";
 import { mockProfessors, mockStudents } from "@/lib/mockData";
 
+// Etapas da tela: escolher o perfil -> (professor | aluno) preencher o login.
 type Step = "select" | "professor" | "aluno";
 
+/**
+ * Login SIMULADO: o usuário escolhe um nome da lista e a sessão é guardada no
+ * localStorage (veja AuthContext). Não há verificação real de senha nesta etapa.
+ */
 export default function LoginPage() {
   const [step, setStep] = useState<Step>("select");
   const router = useRouter();
   const { loginAs } = useAuth();
 
+  // Visitante não precisa de login: vai direto para o início.
   const continueAsVisitor = () => {
     router.push("/");
   };
@@ -108,6 +114,7 @@ export default function LoginPage() {
   );
 }
 
+/** Botão grande de escolha de perfil (professor, aluno ou visitante). */
 function RoleCard({
   icon: Icon,
   title,
@@ -138,6 +145,7 @@ function RoleCard({
   );
 }
 
+/** Formulário de login (lista de usuários + campo de senha ilustrativo). */
 function LoginForm({
   placeholderLabel,
   users,
