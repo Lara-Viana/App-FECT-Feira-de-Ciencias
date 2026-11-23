@@ -4,16 +4,21 @@ import { useMemo, useState } from "react";
 import Header from "@/components/Header";
 import PageShell from "@/components/PageShell";
 import ProjectCard from "@/components/ProjectCard";
-import { projects, type Area } from "@/lib/mockData";
+import DataState from "@/components/DataState";
+import { useProjects } from "@/hooks/useProjects";
+import type { Area } from "@/lib/mockData";
 
 const areas: Area[] = ["Exatas", "Biológicas", "Agrárias", "Humanas", "Tecnologia"];
 
 export default function ProjetosPage() {
+  // Projetos vêm do Firestore em tempo real (CRUD — "R" de Read).
+  const { projects, loading, error } = useProjects();
   const [filter, setFilter] = useState<Area | "Todos">("Todos");
 
+  // Filtra pela área escolhida; recalcula só quando a lista ou o filtro mudam.
   const filtered = useMemo(
     () => (filter === "Todos" ? projects : projects.filter((p) => p.area === filter)),
-    [filter]
+    [filter, projects]
   );
 
   return (
@@ -33,13 +38,15 @@ export default function ProjetosPage() {
           </div>
         </div>
 
+        <DataState loading={loading} error={error} />
+
         <div className="px-5 mt-4 grid grid-cols-1 gap-4">
           {filtered.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-          {filtered.length === 0 && (
+          {!loading && !error && filtered.length === 0 && (
             <p className="text-[13px] text-ink-soft py-8 text-center">
-              Nenhum projeto encontrado nessa área.
+              Nenhum projeto encontrado.
             </p>
           )}
         </div>
@@ -48,6 +55,7 @@ export default function ProjetosPage() {
   );
 }
 
+/** Botão de filtro por área. */
 function FilterPill({
   active,
   onClick,

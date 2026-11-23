@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Trophy, Medal, Award, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import PageShell from "@/components/PageShell";
 import ProjectVisual from "@/components/ProjectVisual";
-import { projects, winners, eventInfo } from "@/lib/mockData";
+import DataState from "@/components/DataState";
+import { useProjects } from "@/hooks/useProjects";
+import { winners, eventInfo } from "@/lib/mockData";
 
 const placeMeta = {
   1: { label: "1º lugar", icon: Trophy, color: "#E2A23B" },
@@ -12,23 +16,41 @@ const placeMeta = {
 } as const;
 
 export default function PremiacaoPage() {
-  const podium = winners.filter((w) => w.place !== "menção");
-  const mentions = winners.filter((w) => w.place === "menção");
+  const { projects, loading, error } = useProjects();
+
+  // O pódio é calculado a partir das notas gravadas no Firestore:
+  // os 3 projetos avaliados com maior nota.
+  const podium = projects
+    .filter((p) => p.score !== null)
+    .sort((a, b) => (b.score as number) - (a.score as number))
+    .slice(0, 3);
+
+  // As menções honrosas continuam definidas manualmente em mockData.ts.
+  const mentions = winners
+    .filter((w) => w.place === "menção")
+    .map((w) => ({ winner: w, project: projects.find((p) => p.id === w.projectId) }))
+    .filter((m) => m.project);
 
   return (
     <>
       <Header eyebrow={eventInfo.edition} title="Projetos vencedores" />
       <PageShell>
+        <DataState loading={loading} error={error} />
+
+        {!loading && !error && podium.length === 0 && (
+          <p className="px-5 pt-6 text-[13px] text-ink-soft">
+            Ainda não há projetos avaliados. O pódio aparece assim que as notas forem lançadas.
+          </p>
+        )}
+
         <div className="px-5 pt-5 space-y-3">
-          {podium.map((winner) => {
-            const project = projects.find((p) => p.id === winner.projectId);
-            if (!project) return null;
-            const meta = placeMeta[winner.place as 1 | 2 | 3];
+          {podium.map((project, index) => {
+            const meta = placeMeta[(index + 1) as 1 | 2 | 3];
             const Icon = meta.icon;
             return (
               <Link
-                key={winner.projectId + winner.category}
-                href={`/projetos/${project.id}`}
+                key={project.id}
+                href={`/projetos/detalhe?id=${project.id}`}
                 className="flex gap-3 border border-line bg-white p-3 hover:border-forest transition-colors"
               >
                 <ProjectVisual area={project.area} code={project.code} className="h-20 w-20 shrink-0" />
@@ -37,7 +59,7 @@ export default function PremiacaoPage() {
                     className="inline-flex items-center gap-1 text-[11px] font-semibold font-mono-tag"
                     style={{ color: meta.color }}
                   >
-                    <Icon size={13} /> {meta.label}
+                    <Icon size={13} /> {meta.label} · {project.score!.toFixed(1)}
                   </span>
                   <p className="font-display font-semibold text-[14px] leading-snug mt-1 truncate">
                     {project.title}
@@ -59,25 +81,21 @@ export default function PremiacaoPage() {
               Menções honrosas
             </h2>
             <div className="mt-3 space-y-3">
-              {mentions.map((winner) => {
-                const project = projects.find((p) => p.id === winner.projectId);
-                if (!project) return null;
-                return (
-                  <Link
-                    key={winner.projectId + winner.category}
-                    href={`/projetos/${project.id}`}
-                    className="flex gap-3 border border-line bg-white p-3 hover:border-forest transition-colors"
-                  >
-                    <ProjectVisual area={project.area} code={project.code} className="h-16 w-16 shrink-0" />
-                    <div className="min-w-0 flex-1 self-center">
-                      <p className="text-[11px] text-ink-soft">{winner.category}</p>
-                      <p className="font-display font-semibold text-[14px] leading-snug truncate">
-                        {project.title}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
+              {mentions.map(({ winner, project }) => (
+                <Link
+                  key={winner.projectId + winner.category}
+                  href={`/projetos/detalhe?id=${project!.id}`}
+                  className="flex gap-3 border border-line bg-white p-3 hover:border-forest transition-colors"
+                >
+                  <ProjectVisual area={project!.area} code={project!.code} className="h-16 w-16 shrink-0" />
+                  <div className="min-w-0 flex-1 self-center">
+                    <p className="text-[11px] text-ink-soft">{winner.category}</p>
+                    <p className="font-display font-semibold text-[14px] leading-snug truncate">
+                      {project!.title}
+                    </p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         )}

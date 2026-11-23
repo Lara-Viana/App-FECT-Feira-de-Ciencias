@@ -4,6 +4,7 @@ import PageShell from "@/components/PageShell";
 import { eventInfo, schedule } from "@/lib/mockData";
 import Link from "next/link";
 
+/** Tela inicial: dados do evento, atalhos e programação do dia (dados fixos de mockData.ts). */
 export default function HomePage() {
   return (
     <>
@@ -72,6 +73,7 @@ export default function HomePage() {
   );
 }
 
+/** Linha da ficha do evento (ícone + rótulo + valor). */
 function InfoRow({
   icon: Icon,
   label,

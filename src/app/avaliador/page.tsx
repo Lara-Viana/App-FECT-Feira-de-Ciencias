@@ -3,17 +3,21 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CircleCheck, CircleDashed, ChevronRight } from "lucide-react";
+import { CircleCheck, CircleDashed, ChevronRight, Settings2 } from "lucide-react";
 import Header from "@/components/Header";
 import PageShell from "@/components/PageShell";
 import AreaChip from "@/components/AreaChip";
+import DataState from "@/components/DataState";
 import { useAuth } from "@/context/AuthContext";
-import { projects } from "@/lib/mockData";
+import { useProjects } from "@/hooks/useProjects";
 
 export default function AvaliadorPage() {
   const { session, loading } = useAuth();
   const router = useRouter();
+  // Projetos vindos do Firestore em tempo real.
+  const { projects, loading: loadingProjects, error } = useProjects();
 
+  // Só professor acessa esta tela; os demais vão para o login.
   useEffect(() => {
     if (!loading && session?.role !== "professor") {
       router.replace("/login");
@@ -24,6 +28,7 @@ export default function AvaliadorPage() {
     return null;
   }
 
+  // Separa os projetos ainda sem nota dos já avaliados.
   const pending = projects.filter((p) => p.score === null);
   const done = projects.filter((p) => p.score !== null);
 
@@ -31,7 +36,17 @@ export default function AvaliadorPage() {
     <>
       <Header eyebrow={session.name} title="Avaliar projetos" />
       <PageShell>
+        <DataState loading={loadingProjects} error={error} />
+
         <div className="px-5 pt-5">
+          {/* Atalho para o CRUD completo de projetos (criar, editar, excluir). */}
+          <Link
+            href="/avaliador/gerenciar"
+            className="mb-4 flex items-center justify-center gap-2 border border-forest py-2.5 text-[13px] font-semibold"
+            style={{ color: "var(--forest)" }}
+          >
+            <Settings2 size={15} /> Gerenciar projetos
+          </Link>
           <div className="flex gap-3">
             <StatCard label="Pendentes" value={pending.length} color="var(--amber)" />
             <StatCard label="Avaliados" value={done.length} color="var(--forest)" />
@@ -46,7 +61,7 @@ export default function AvaliadorPage() {
             {pending.map((p) => (
               <EvalRow key={p.id} id={p.id} code={p.code} title={p.title} area={p.area} evaluated={false} />
             ))}
-            {pending.length === 0 && (
+            {!loadingProjects && pending.length === 0 && (
               <p className="text-[13px] text-ink-soft py-2">Todos os projetos já foram avaliados.</p>
             )}
           </div>
@@ -65,6 +80,7 @@ export default function AvaliadorPage() {
   );
 }
 
+/** Cartão com um número grande (ex.: quantos projetos pendentes). */
 function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div className="flex-1 border border-line bg-white p-3.5">
@@ -76,6 +92,7 @@ function StatCard({ label, value, color }: { label: string; value: number; color
   );
 }
 
+/** Linha clicável de um projeto; leva ao formulário de avaliação. */
 function EvalRow({
   id,
   code,
@@ -93,7 +110,7 @@ function EvalRow({
 }) {
   return (
     <Link
-      href={`/avaliador/${id}`}
+      href={`/avaliador/avaliar?id=${id}`}
       className="flex items-center gap-3 border border-line bg-white p-3.5 hover:border-forest transition-colors"
     >
       {evaluated ? (

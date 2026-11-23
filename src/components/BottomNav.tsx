@@ -11,6 +11,10 @@ type Tab = {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
 };
 
+/**
+ * Barra de navegação inferior (estilo app de celular).
+ * A última aba muda conforme o perfil: Entrar (visitante), Avaliar (professor) ou Minha nota (aluno).
+ */
 export default function BottomNav() {
   const pathname = usePathname();
   const { session } = useAuth();
@@ -21,6 +25,7 @@ export default function BottomNav() {
     { href: "/premiacao", label: "Premiação", icon: Trophy },
   ];
 
+  // Escolhe a última aba de acordo com o perfil logado.
   let lastTab: Tab;
   if (session?.role === "professor") {
     lastTab = { href: "/avaliador", label: "Avaliar", icon: ClipboardCheck };
@@ -39,6 +44,7 @@ export default function BottomNav() {
     >
       <div className="mx-auto max-w-md grid grid-cols-4">
         {tabs.map((tab) => {
+          // Aba ativa: a Início só quando a rota é exatamente "/"; as outras por prefixo.
           const active =
             tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
           const Icon = tab.icon;

@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// Regras de segurança do Cloud Firestore.
+// Cole este conteúdo em: Console Firebase > Firestore Database > Regras > Publicar.
+//
+// ATENÇÃO (trabalho acadêmico): como o login do app ainda é SIMULADO (não usa o Firebase
+// Authentication), não há como distinguir professor de aluno no servidor. Por isso a coleção
+// "projetos" está aberta para leitura e escrita. Em produção, troque por regras baseadas em
+// request.auth (ex.: só professores autenticados podem escrever).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /projetos/{projeto} {
+      allow read, write: if true;
+    }
+  }
+}

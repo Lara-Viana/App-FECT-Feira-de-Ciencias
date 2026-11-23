@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#1B4332"/>
+  <!-- Frasco de laboratório (Erlenmeyer) -->
+  <path d="M440 220h144v230l190 310c28 46-5 104-59 104H309c-54 0-87-58-59-104l190-310z" fill="#FFFFFF"/>
+  <rect x="410" y="190" width="204" height="44" rx="12" fill="#FFFFFF"/>
+  <!-- Líquido -->
+  <path d="M352 650h320l102 110c20 36-6 84-48 84H298c-42 0-68-48-48-84z" fill="#E2A23B"/>
+  <circle cx="470" cy="740" r="26" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="570" cy="700" r="16" fill="#FFFFFF" opacity="0.8"/>
+</svg>

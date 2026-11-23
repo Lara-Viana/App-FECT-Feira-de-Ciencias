@@ -4,10 +4,11 @@ import type { Project } from "@/lib/mockData";
 import AreaChip from "./AreaChip";
 import ProjectVisual from "./ProjectVisual";
 
+/** Cartão de um projeto na lista; ao tocar abre a tela de detalhe. */
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
-      href={`/projetos/${project.id}`}
+      href={`/projetos/detalhe?id=${project.id}`}
       className="block border border-line bg-white hover:border-forest transition-colors"
     >
       <ProjectVisual area={project.area} code={project.code} className="h-32 w-full" />

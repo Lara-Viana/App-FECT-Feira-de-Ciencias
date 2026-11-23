@@ -8,11 +8,14 @@ import PageShell from "@/components/PageShell";
 import AreaChip from "@/components/AreaChip";
 import ProjectVisual from "@/components/ProjectVisual";
 import { useAuth } from "@/context/AuthContext";
-import { projects } from "@/lib/mockData";
+import DataState from "@/components/DataState";
+import { useProject } from "@/hooks/useProjects";
 
 export default function AlunoPage() {
   const { session, loading } = useAuth();
   const router = useRouter();
+  // Busca em tempo real o projeto do aluno logado (nota e feedback aparecem assim que o professor salvar).
+  const { project, loading: loadingProject, error } = useProject(session?.projectId ?? null);
 
   useEffect(() => {
     if (!loading && session?.role !== "aluno") {
@@ -24,16 +27,18 @@ export default function AlunoPage() {
     return null;
   }
 
-  const project = projects.find((p) => p.id === session.projectId);
-
-  if (!project) {
+  // Enquanto carrega, em caso de erro ou sem projeto vinculado, mostra o aviso correspondente.
+  if (loadingProject || error || !project) {
     return (
       <>
         <Header eyebrow={session.name} title="Meu projeto" />
         <PageShell>
-          <p className="px-5 pt-6 text-[13px] text-ink-soft">
-            Nenhum projeto vinculado a este usuário.
-          </p>
+          <DataState loading={loadingProject} error={error} />
+          {!loadingProject && !error && (
+            <p className="px-5 pt-6 text-[13px] text-ink-soft">
+              Nenhum projeto vinculado a este usuário.
+            </p>
+          )}
         </PageShell>
       </>
     );
