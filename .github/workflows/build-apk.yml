@@ -42,8 +42,9 @@ jobs:
       # O runner do GitHub já traz o Android SDK; só garantimos licenças e a plataforma 36.
       - name: Preparar Android SDK
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | head -1)
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;36.0.0"
 
       - run: npm ci
 
