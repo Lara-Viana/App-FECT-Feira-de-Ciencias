@@ -22,13 +22,23 @@ Aplicativo da feira (FECT) feito em **Next.js 16 + React 19 + TypeScript + Tailw
 
 > O login ainda é **simulado** (escolhe-se um nome da lista; fica no `localStorage`). Veja `firestore.rules`.
 
-## 1. Configurar o Firebase (uma vez)
+## 1. Configurar o Firebase
+
+**Para rodar este projeto, o banco já está pronto.** Basta copiar `.env.example` para `.env.local`, sem alterar nada:
+
+```bash
+cp .env.example .env.local
+```
+
+(No Prompt de Comando do Windows: `copy .env.example .env.local`.)
+
+### Opcional: usar outro projeto Firebase
 
 1. Acesse <https://console.firebase.google.com> → **Adicionar projeto**.
 2. **Criação → Firestore Database → Criar banco de dados** (região `southamerica-east1`, modo produção).
 3. Aba **Regras** → cole o conteúdo de `firestore.rules` → **Publicar**.
 4. **Configurações do projeto (engrenagem) → Seus aplicativos → ícone Web `</>`** → registre o app e copie o `firebaseConfig`.
-5. Copie `.env.example` para `.env.local` e preencha com esses valores.
+5. No seu `.env.local`, troque os valores pelos do novo projeto.
 
 ## 2. Rodar no computador
 
