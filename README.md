@@ -22,33 +22,66 @@ Aplicativo da feira (FECT) feito em **Next.js 16 + React 19 + TypeScript + Tailw
 
 > O login ainda é **simulado** (escolhe-se um nome da lista; fica no `localStorage`). Veja `firestore.rules`.
 
-## 1. Configurar o Firebase
+## 1. Baixar o projeto
 
-**Para rodar este projeto, o banco já está pronto.** Basta copiar `.env.example` para `.env.local`, sem alterar nada:
+Antes, instale o **[Node.js](https://nodejs.org) versão 22 ou mais nova** (ele já traz o `npm`).
+Para conferir a versão instalada: `node -v`.
 
-```bash
-cp .env.example .env.local
-```
+Escolha **uma** das duas formas de baixar:
 
-(No Prompt de Comando do Windows: `copy .env.example .env.local`.)
+- **Com Git** (precisa do [Git](https://git-scm.com) instalado):
 
-### Opcional: usar outro projeto Firebase
+  ```bash
+  git clone https://github.com/Lara-Viana/App-FECT-Feira-de-Ciencias.git
+  cd App-FECT-Feira-de-Ciencias
+  ```
+
+- **Sem Git:** abra <https://github.com/Lara-Viana/App-FECT-Feira-de-Ciencias> → botão verde **Code** →
+  **Download ZIP**. Extraia o `.zip` e abra um terminal dentro da pasta extraída (a que tem o arquivo `package.json`).
+
+> **Windows:** se aparecer o erro `Filename too long`, baixe em uma pasta de caminho curto (ex.: `C:\projetos`)
+> ou use `git clone -c core.longpaths=true <endereço>`.
+
+## 2. Rodar no computador
+
+Dentro da pasta do projeto:
+
+1. Crie o arquivo de configuração do banco. **Não precisa alterar nada nele:** o Firebase do trabalho já está preenchido.
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   No Prompt de Comando do Windows, use: `copy .env.example .env.local`.
+
+2. Instale as dependências (precisa de internet e pode demorar alguns minutos):
+
+   ```bash
+   npm install
+   ```
+
+3. Inicie o app:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Abra `http://localhost:3000` no navegador. O layout é pensado para celular: aperte F12 e clique no ícone de
+   celular. Para parar o app, aperte `Ctrl + C` no terminal.
+
+O banco já tem os projetos de exemplo. Se a lista estiver vazia, entre como **Professor → Gerenciar projetos →
+Carregar projetos de exemplo**.
+
+> **Windows (PowerShell):** se o `npm` for bloqueado com a mensagem de que a execução de scripts está desabilitada,
+> use o **Prompt de Comando** (cmd) no lugar do PowerShell.
+
+## Opcional: usar outro projeto Firebase
 
 1. Acesse <https://console.firebase.google.com> → **Adicionar projeto**.
 2. **Criação → Firestore Database → Criar banco de dados** (região `southamerica-east1`, modo produção).
 3. Aba **Regras** → cole o conteúdo de `firestore.rules` → **Publicar**.
 4. **Configurações do projeto (engrenagem) → Seus aplicativos → ícone Web `</>`** → registre o app e copie o `firebaseConfig`.
 5. No seu `.env.local`, troque os valores pelos do novo projeto.
-
-## 2. Rodar no computador
-
-```bash
-npm install
-npm run dev
-```
-
-Acesse `http://localhost:3000` (use o modo celular do navegador: F12 → ícone de celular).
-Entre como **Professor → Gerenciar projetos → Carregar projetos de exemplo** para popular o banco.
 
 ## 3. PWA (o que é)
 
@@ -66,7 +99,12 @@ Para testar: `npm run build` → servir a pasta `out/` com HTTPS (ex.: Firebase 
 
 O Capacitor pega o site exportado (`out/`) e o coloca dentro de um app Android (`android/`).
 
-Pré-requisitos: **JDK 21** e **Android SDK** (instalados com o Android Studio) e o `.env.local` preenchido.
+**Sem instalar nada:** o GitHub Actions (`.github/workflows/build-apk.yml`) gera o APK a cada envio (push) para a
+branch `feature/firebase-crud-apk`. Para baixar: aba **Actions** do repositório → **Gerar APK** → abra uma execução
+concluída → **Artifacts** → `fect-apk` (precisa estar logado no GitHub; o `.apk` vem dentro de um `.zip`).
+O workflow usa a configuração do Firebase escrita no próprio arquivo, e não o `.env.local`.
+
+**No seu computador**, os pré-requisitos são: **JDK 21** e **Android SDK** (instalados com o Android Studio) e o `.env.local` preenchido.
 
 ```bash
 npm run android:sync     # build do site + copia para o projeto Android
